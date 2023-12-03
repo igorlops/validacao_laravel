@@ -7,22 +7,23 @@ use Illuminate\Support\Facades\Validator;
 
 class CadastroController extends Controller
 {
-    public function store()
+    public function store(Request $request)
     {
+        // dd($request->all());
         $validacao = Validator::make(
-            [
-                "curso"=>"PHP",
-                "carga"=>10
-            ],
+            $request->except('_token'),
             [
                 "curso"=> ['required','max:100'],
                 "carga"=>['required','integer']
+            ],
+            [
+
             ]
             );
 
             if($validacao->fails())
             {
-                dd('Validção falhou');
+                return redirect()->back()->withInput()->withErrors($validacao);
             }
             dd('Validção passou');
 
